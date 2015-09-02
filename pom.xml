@@ -4,7 +4,7 @@
   <groupId>uk.ac.tgac.fluxion.tools</groupId>
   <artifactId>fluxion-tools</artifactId>
   <name>Fluxion Tools and Utilities</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>pom</packaging>
   <url>http://fluxion.sourceforge.net/fluxion-tools</url>
 
@@ -37,6 +37,7 @@
     </url>
   </scm>
 
+  <!--
   <distributionManagement>
     <downloadUrl>http://www.hasbanana.com/maven/repo</downloadUrl>
     <repository>
@@ -50,12 +51,63 @@
       <url>scp://www.hasbanana.com/var/www/vhosts/hasbanana.com/httpdocs/maven/repo</url>
     </snapshotRepository>
   </distributionManagement>
+  -->
+
+  <distributionManagement>
+    <downloadUrl>https://repos.tgac.ac.uk/maven/repo</downloadUrl>
+    <repository>
+      <id>fluxion-releases</id>
+      <name>Fluxion repository</name>
+      <url>scp://repos.tgac.ac.uk/storage/html/maven/fluxion/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>fluxion-snapshots</id>
+      <name>Fluxion snapshot repository</name>
+      <url>scp://repos.tgac.ac.uk/storage/html/maven/fluxion/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <repositories>
     <repository>
-      <id>hasbanana-repo</id>
-      <name>hasBanana Repository</name>
-      <url>http://www.hasbanana.com/maven/repo</url>
+      <id>tgac-repo</id>
+      <name>TGAC Maven Repository</name>
+      <url>https://repos.tgac.ac.uk/maven/repo</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+
+    <repository>
+      <id>fluxion-snapshots</id>
+      <name>TGAC Maven Snapshots Repository</name>
+      <url>https://repos.tgac.ac.uk/maven/fluxion/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+        <updatePolicy>always</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+
+    <repository>
+      <id>fluxion-releases</id>
+      <name>TGAC Maven Releases Repository</name>
+      <url>https://repos.tgac.ac.uk/maven/fluxion/releases</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
     </repository>
 
     <repository>
@@ -71,9 +123,23 @@
 
   <pluginRepositories>
     <pluginRepository>
-      <id>hasbanana-repo</id>
-      <name>hasBanana Repository</name>
-      <url>http://www.hasbanana.com/maven/repo</url>
+      <id>fluxion-releases</id>
+      <name>Fluxion repository</name>
+      <url>https://repos.tgac.ac.uk/maven/fluxion/releases</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </releases>
+    </pluginRepository>
+
+    <pluginRepository>
+      <id>fluxion-snapshots</id>
+      <name>Fluxion snapshot repository</name>
+      <url>https://repos.tgac.ac.uk/maven/fluxion/snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
     </pluginRepository>
 
     <pluginRepository>

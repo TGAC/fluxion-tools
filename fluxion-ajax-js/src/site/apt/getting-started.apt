@@ -1,0 +1,55 @@
+ ------
+ Getting Started
+ ------
+ Rob Davey
+ ------
+ 21/1/2010
+ ------
+
+Fluxion AJAX Javascript libraries
+
+  Instead of including the fluxion-ajax-js artifact dependency in your Maven project,
+  you will need to instruct the current build phase to unpack the Javascript files instead.
+  
++-----------------------------------------------------------------------------------------+
+<build>
+  <plugins>
+
+...
+
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>unpack-fluxion-ajax-js</id>
+          <phase>process-resources</phase>
+          <goals>
+            <goal>unpack</goal>
+          </goals>
+          <configuration>
+            <artifactItems>
+              <artifactItem>
+                <groupId>net.sourceforge.fluxion.ajax</groupId>
+                <artifactId>fluxion-ajax-js</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <type>jar</type>
+                <overWrite>true</overWrite>
+              </artifactItem>
+            </artifactItems>
+            <excludes>META-INF</excludes>
+            <outputDirectory>target/${pom.artifactId}/scripts/fluxion-ajax/</outputDirectory>
+            <overWriteReleases>true</overWriteReleases>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+
+...
+
+  </plugins>
+</build>
++-----------------------------------------------------------------------------------------+
+
+  
+  

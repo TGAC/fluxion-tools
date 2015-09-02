@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Fluxion AJAX JS">
+
+<body>
+    <menu name="Fluxion AJAX JS">
+      <item name="Introduction" href="./index.html"/>
+      <item name="Getting Started" href="./getting-started.html"/>
+      <item name="Documentation" href="./documentation.html"/>
+      <item name="Downloads" href="./downloads.html"/>
+    </menu>
+    
+    <menu name="Support">
+      <item name="Further support" href="/support.html" />
+      <item name="FAQs" href="/faq.html"/>
+      <item name="Mailing Lists" href="/mail-lists.html"/>
+    </menu>
+    
+    <menu ref="reports"/>
+  </body>
+</project>

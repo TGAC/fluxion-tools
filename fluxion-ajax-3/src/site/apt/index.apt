@@ -1,0 +1,17 @@
+ ------
+ Welcome
+ ------
+ Rob Davey
+ ------
+ 21/1/2010
+ ------
+
+Fluxion AJAX Spring Integration
+
+  To complement the client-side fluxion-ajax-js Javascript module, the Fluxion AJAX 
+  Spring Integration library provides a full Spring MVC framework to build
+  AJAX-enabled backend logic quickly and easily.  It is very straightforward to start
+  developing beans that can accept AJAX requests, and the configuration of these beans
+  is eased by using a typical Spring bean config XML and a simple annotation and method signature.
+  
+  Please move on to {{{./getting-started.html}Getting Started}} to learn more.

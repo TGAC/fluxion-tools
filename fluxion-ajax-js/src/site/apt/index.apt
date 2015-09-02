@@ -1,0 +1,15 @@
+ ------
+ Welcome
+ ------
+ Rob Davey
+ ------
+ 21/1/2010
+ ------
+
+Fluxion AJAX Javascript libraries
+
+  To complement the server-side fluxion-ajax Spring module, whereby beans can 
+  be made available to asynchronous HTTP requests (AJAX), the Fluxion AJAX 
+  Javascript libraries provide convenience functions to construct complex
+  AJAX calls with minimal effort.
+

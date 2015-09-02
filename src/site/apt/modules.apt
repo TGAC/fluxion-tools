@@ -1,0 +1,28 @@
+ ------
+ Fluxion Tools - Modules
+ ------
+ Tony Burdett
+ ------
+ 20/11/2009
+ ------
+
+Fluxion Tools Modules
+
+  Below is a short description of each of the Fluxion "Tools" modules, and
+  what it can be used for.
+
+*---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
+| fluxion-ajax        | A library for exposing AJAX endpoints, using annotated 'POJOs' and a single spring config file                                                    |
+*---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
+| fluxion-ajax-beans  | A small collection of AJAX endpoints and associated utilities, providing AJAX access to common server-side operations (e.g. file upload handling) |
+*---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
+| fluxion-ajax-js     | Client-side javascript library for communicating with the server via AJAX calls to endpoints exposed using fluxion-ajax                           |
+*---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
+| fluxion-spi         | A collections of annotations and classes that allow Java interfaces and classes to be marked as services according to the Sun SPI specification   |
+*---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
+| fluxion-spi-manager | A set of classes that allow hotloading of Java SPI implementations                                                                                |
+*---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
+| fluxion-utils       | Contains reasoner management facilities, reasoner connection pooling, and some powerful utils for analysing and inspected inferred OWL ontologies |
+*---------------------+---------------------------------------------------------------------------------------------------------------------------------------------------+
+
+  For more details on each of these modules, see the individual module documentation.

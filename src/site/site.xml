@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Fluxion Utilities">
+
+<body>
+    <menu name="Fluxion Utils">
+      <item name="Overview" href="./index.html"/>
+      <item name="Available modules" href="./modules.html"/>
+      <item name="Documentation" href="./documentation.html"/>
+    </menu>
+
+    <menu ref="modules"/>
+
+    <menu ref="reports"/>
+  </body>
+</project>

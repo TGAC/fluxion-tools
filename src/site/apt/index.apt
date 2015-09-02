@@ -1,0 +1,26 @@
+ ------
+ Fluxion Tools - Overview
+ ------
+ Tony Burdett
+ ------
+ 20/11/2009
+ ------
+
+Fluxion Tools
+
+  The Fluxion software suite includes several libraries for working with
+  ontologies, classifying and reasoning over knowledge bases, using complex data
+  in a web context, dovetailing AJAX and Spring, and implementing the Java SPI
+  framework.
+
+  This software is obviously incorporated with the Fluxion data integration
+  architecture, but are also available under the LGPL license for use in open
+  source projects.  We hope you find them useful!
+
+  There is a diverse range of library modules available - brief descriptions of
+  each module is available on the {{{modules.html}modules page}}.
+
+  For more detailed documentation and code examples, view the
+  {{{documentation.html}documentation page}}.
+
+  Comprehensive javadocs are available from the link on the left.

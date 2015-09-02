@@ -1,0 +1,207 @@
+ ------
+ Documentation
+ ------
+ Rob Davey
+ ------
+ 21/1/2010
+ ------
+
+Fluxion.doAjax
+
+  The Fluxion AJAX javascript libraries make it simple for AJAX requests to be constructed and any responses processed with varying degrees of detail.
+
+* Standard requests
+
+  A standard request looks like this:
+
++----+
+Fluxion.doAjax(
+  beanName,
+  methodName,
+  serverParams,
+  clientParams
+);
++----+
+
+  * beanName - a string representing the name of the @Ajaxified bean exposed by the fluxion-ajax module, and referenced by the Spring bean ref in fluxion/ajax.xml. See the  {{{/fluxion-ajax/index.html}fluxion-ajax}} module documentation of rmore information.
+  
+  * methodName - a string representing the method that is to be called on that bean.
+  
+  * serverParams - a JSON object representing any custom parameters that need to be processed by the bean.
+  
+  * clientParams - a JSON object representing a set of defined parameters that will be processed by the Fluxion AJAX Javascript library.
+
+  []
+  
+  A more concrete example would look like this:
+  
++----+
+Fluxion.doAjax(
+  "dateChecker",
+  "checkDate",
+  {"timezone":"GMT"},
+  {"doOnSuccess":dateSuccessFunc}
+);
++----+
+
+  The method "checkDate" on the bean referenced by the ID "dateChecker" will be called with a "timezone" server parameter and the "doOnSuccess" client parameter. More about each of the parameter systems is below.
+
+* Periodical requests
+
+  If we wanted to fire a periodical AJAX request (one that keeps being fired at a given interval until told to stop), we would add the "ajaxType" client parameter:
+
++----+
+Fluxion.doAjax(
+  "dateChecker",
+  "checkDate",
+  {"timezone":"GMT"},
+  {"ajaxType":"periodical","doOnSuccess":dateSuccessFunc}
+);
++----+
+
+  Stopping periodical requests is very easy - simply construct a JSON response from the server containing the object {"stopUpdater":"true"}. More information regarding this
+  functionality is found in the {{{/fluxion-ajax/index.html}fluxion-ajax}} module documentation.
+
+* Server Parameters
+
+  There is only one optional parameter recognised by the library, and that is 'url'.  Setting this parameter will override the default URL where the AjaxController is mapped to, i.e. this defaults to '/ajax.web'. Using the example above:
+
++----+
+Fluxion.doAjax(
+  "dateChecker",
+  "checkDate",
+  {"timezone":"GMT","url":"/ajax/service"},
+  {"ajaxType":"periodical","doOnSuccess":dateSuccessFunc}
+);
++----+
+  
+  will no longer send AJAX requests to '/ajax.web', but '/ajax/service'.
+
+  There are no other set server parameters that are implicitly sent to the server as part of the AJAX call, so these are left to the user to implement if necessary. Examples might be specific client-side parameters that may effect a portion of backend business logic, such as limiting a SQL query to a certain limit given a current client-side page value.
+
+* Client Parameters
+
+  There are a strict set of client parameters available that change the behaviour of the Fluxion AJAX system. You've already seen "ajaxType" and "doOnSuccess", but there are a few more, so we'll go into each client parameter in detail.
+
+  * ajaxType - when included, AND set to "periodical", this flag constructs a periodical updater instead of the standard one-time-only request type. 
+  
+  * updateFrequency - only functional when ajaxType is set, and set to "periodical". The period between each repeated ajax call. Defaults to 1 (second).
+  
+  * updateDecay - only functional when ajaxType is set, and set to "periodical". A multiplier that lengthens the interval period between each successive ajax call.
+  
+  * passthrough - this flag bypasses all the response processing and just returns the raw JSON string outputted by the bean.
+  
+  * updateElement - this flag should be set to the ID of an available HTML element if that element should be populated with the "response" object returned by the bean, if indeed there
+  is one. (More information about constructing valid server responses can be found in the {{{/fluxion-ajax/index.html}fluxion-ajax}} module documentation).
+  
+  * doOnLoading - this object can hold a var representing a javascript function that will be called on the onLoading part of the ajax request.
+  
+  * doOnSuccess - this object can hold a var representing a javascript function that will be called on the onSuccess part of the ajax request. More about this flag below.
+  
+  []
+  
+* doOnSuccess
+  
+  An example of how to use the doOnSuccess parameter follows:
+  
++----+
+var dateSuccessFunc = function(json) {
+    if (json.dateIsNotGMT) {
+        alert("Cannot process non-GMT timezones");
+    }
+}
+
+Fluxion.doAjax(
+  "dateChecker",
+  "checkDate",
+  {"timezone":"GMT"},
+  {"doOnSuccess":dateSuccessFunc}
+);
++----+  
+
+  The dateSuccessFunc function is defined and stored in a variable which is passed as the value of the "doOnSuccess" object (NOTE that there are no quotes around the function name in
+  the example), and will be called once a successful response is returned from the server.  The json parameter represents any JSON objects returned from the server. This gives a great deal of flexibility when processing an AJAX response.
+
+Fluxion.doAjaxUpload
+  
+  The Fluxion AJAX Javascript library also provides a simple client-side mechanism for uploading files via @Ajaxified beans. The file data is pushed into a temporary iframe, then
+  uploaded to the server.
+  
++----+
+Fluxion.doAjaxUpload(
+  formId,
+  beanId,
+  eventId, 
+  serverParams, 
+  clientParams, 
+  validationParams
+);
++----+
+
+  As you can see, it's very similar to the previous Fluxion.doAjax specification, but with a couple of additions.
+  
+  * formId - this is the ID of the HTML upload form, from which the multipart request is parsed server-side. See the {{{/fluxion-ajax/index.html}fluxion-ajax}} module documentation for more information on processing file uploads.
+  
+  * validationParams - these parameters represent any kind of validation procedures that need to be carried out on the response. In a similar fashion to a standard doAjax request, you
+  need to specify a validation bean identifier, which will be passed the parameters that you specify and the "validate" method within that bean will be called with those parameters in the "serverParams" object:
+  
++----+
+Fluxion.doAjaxUpload(
+  "uploadForm",
+  "fileUploadBean",
+  "upload", 
+  {"":""}, 
+  {"":""}, 
+  {"validationBeanId":"validationBean"}
+);
++----+
+  
+  []
+  
+  So, armed with this knowledge, we can construct a file uploading form, and some simple javascript functions that process everything we need:
+  
++----+
+<form method='post'
+    id='ajax_upload_form'
+    action="file_upload.web"
+    enctype="multipart/form-data"
+    onsubmit="checkUploadProgress();">
+File to upload:
+<input type="file" name="filetoupload"/>
+<input type="submit" name="submit" value="Upload File"/>
+</form>
+
+...
+
+function checkUploadProgress() {
+  Fluxion.doAjaxUpload(
+      'ajax_upload_form',
+      'fileUploadProgressBean',
+      'checkUploadStatus',
+      {'':''},
+      {'statusElement':'statusdiv', 'progressElement':'progressdiv'},
+      {'validationBeanId':'fileValidationBean'}
+  );
+}
++----+
+
+  We point the form action to a Spring controller that actually processes the file upload ("file_upload.web"), for example using the Apache Commons FileUpload library.  We can then
+  specify a progress checking function that will be called when the form is submitted, via the onsubmit property.
+  
+  The checkUploadProgress function simply kicks off the upload, and registers a progress updating call. We pass the Fluxion.doAjaxUpload:
+  
+  * the name of the form
+  
+  * the bean and method that checks the progress
+  
+  * no server parameters
+  
+  * client parameters specifying 
+  
+    * a status element that can be updated with the results of the upload
+    
+    * a progress element that can show the raw JSON response from the upload progress checker
+    
+  * validation parameters specifying the name of the bean on which the "validate" method will be called, which will perform some kind of post-upload validation
+  
+  []

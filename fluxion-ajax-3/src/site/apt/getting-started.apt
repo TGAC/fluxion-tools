@@ -1,0 +1,176 @@
+ ------
+ Getting Started
+ ------
+ Rob Davey
+ ------
+ 21/1/2010
+ ------
+
+Fluxion AJAX Spring Integration libraries
+  
+  To start building AJAX-enabled beans, simply include the fluxion-ajax module artifact in your dependency section of your bean
+  project pom.xml. This will suck in all the other required dependencies:
+  
++-----------------------------------------------------------------------------------------+
+<dependencies>
+
+...
+
+  <dependency>
+    <groupId>net.sourceforge.fluxion.ajax</groupId>
+    <artifactId>fluxion-ajax</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </dependency>
+  
+...
+
+</dependencies>
++-----------------------------------------------------------------------------------------+
+
+  You can then start writing your bean.
+
+Imports
+  
+  Firstly, a few simple imports need to be present in each bean:
+  
++-----------------------------------------------------------------------------------------+
+package your.bean.package;
+
+import net.sf.json.JSONObject;
+import net.sf.json.JSONException;
+import javax.servlet.http.HttpSession;
+
+import net.sourceforge.fluxion.ajax.Ajaxified;
+import net.sourceforge.fluxion.ajax.util.JSONUtils;  
++-----------------------------------------------------------------------------------------+  
+
+The @Ajaxified annotation
+  
+  Secondly, each bean needs to be annotated by the @Ajaxified annotation. This is picked up at
+  runtime and allows the Spring system to expose these beans and allow them to be handled
+  by a class called the AjaxExporter (see {{{documentation.html} the Documentation pages}}).
+
++-----------------------------------------------------------------------------------------+
+@Ajaxified
+public class AjaxTestBean { ... }  
++-----------------------------------------------------------------------------------------+  
+
+Method signature
+  
+  Finally, each bean method will be exported by the underlying AjaxHandler system (see
+  {{{documentation.html} the Documentation pages}}) so that it's callable by name from the 
+  Fluxion AJAX Javascript library functions. Each method has to follow a certain signature 
+  whereby the parameters are:
+  
+  * the current HTTPSession so that any session parameters are available to the method
+  
+  * and a JSONObject that represents the serverParams object passed via AJAX to the bean (see {{{/fluxion-ajax-js/index.html}
+  the Fluxion AJAX Javascript library pages}})
+  
+  []
+  
++-----------------------------------------------------------------------------------------+  
+public JSONObject test(HttpSession session, JSONObject json) throws JSONException { ... }
++-----------------------------------------------------------------------------------------+  
+
+Building responses
+  
+  The JSONUtils helper class contains some convenience methods for constructing simple AJAX responses. More information on
+  these methods can be found in the fluxion-ajax API.
+  
+* Simple responses with JSONUtils.SimpleJSONResponse
+  
+  Putting this all together, here's an example bean that just returns a hardcoded response back to the client:
+
++-----------------------------------------------------------------------------------------+  
+package net.sourceforge.fluxion.beans;
+
+import net.sf.json.JSONObject;
+import net.sf.json.JSONException;
+import javax.servlet.http.HttpSession;
+
+import net.sourceforge.fluxion.ajax.Ajaxified;
+import net.sourceforge.fluxion.ajax.util.JSONUtils;
+
+/**
+ * A test version of an ajaxified bean
+ *
+ * @author Rob Davey
+ * @date Jan 21st 2010
+ */
+@Ajaxified
+public class AjaxTestBean {
+  public JSONObject test(HttpSession session, JSONObject json) throws JSONException {
+    return JSONUtils.SimpleJSONResponse("Here is a simple JSON response");
+  }
+}
++-----------------------------------------------------------------------------------------+  
+
+* Error responses with JSONUtils.SimpleJSONError
+
+  You can also return error messages that will be popped up as a Javascript alert by the client:
+  
++-----------------------------------------------------------------------------------------+    
+@Ajaxified
+public class AjaxTestBean {
+  public JSONObject test(HttpSession session, JSONObject json) throws JSONException {
+    String os = System.getProperty("os.name").toLowerCase();
+    if (os.indexOf("win") >= 0) {
+        return JSONUtils.SimpleJSONError("I am running on Windows :(");
+    }
+    return JSONUtils.SimpleJSONResponse("I'm not running on Windows :)");
+  }
+}
++-----------------------------------------------------------------------------------------+  
+
+* More complex responses with JSONUtils.JSONObjectResponse
+
+  Returning more complex responses with custom JSON objects or arrays is also easy using a 
+  JSON string:
+  
++-----------------------------------------------------------------------------------------+
+@Ajaxified
+public class AjaxTestBean {
+  public JSONObject test(HttpSession session, JSONObject json) throws JSONException {
+    return JSONUtils.JSONObjectResponse("{'isFinished':'false','isStarted':'true'}");
+  }
+}
++-----------------------------------------------------------------------------------------+  
+
+  Or with a vararg of JSONObjects:
+  
++-----------------------------------------------------------------------------------------+
+@Ajaxified
+public class AjaxTestBean {
+  public JSONObject test(HttpSession session, JSONObject json) throws JSONException {
+    return JSONUtils.JSONObjectResponse(
+        JSONObject.fromObject("{'foo':'1'}"),
+        JSONObject.fromObject("{'bar':'2'}"),
+        JSONObject.fromObject("{'baz':'3'}")
+    );
+  }
+}
++-----------------------------------------------------------------------------------------+    
+
+Finally...
+
+  You need to tell the AjaxExporter which beans you are going to allowed to be checked for 
+  @Ajaxified status, and this is done simply by adding in the bean declaration in a special
+  ajax.xml config file within your project.  If you have multiple projects housing Ajaxified
+  beans, and hence multiple ajax.xml config files, this is automatically handled for you by the
+  AjaxExporter.
+  
+  So, simply create src/main/resources/fluxion/ajax.xml within your project and declare your beans
+  as you would normally in Spring:
+  
++-----------------------------------------------------------------------------------------+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="ajaxTestBean"
+        class="net.sourceforge.fluxion.beans.AjaxTestBean" />
+        
+</beans>
++-----------------------------------------------------------------------------------------+  
